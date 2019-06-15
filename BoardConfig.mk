@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2018 The Mokee Project
+# Copyright (C) 2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 # definition file).
 #
 
-DEVICE_PATH := device/xiaomi/whyred
+DEVICE_PATH := device/xiaomi/tulip
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := sdm660
@@ -59,10 +59,10 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_SOURCE := kernel/xiaomi/sdm660
-TARGET_KERNEL_CONFIG := whyred_defconfig
+TARGET_KERNEL_SOURCE := kernel/xiaomi/tulip
+TARGET_KERNEL_CONFIG := tulip_defconfig
 TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_CLANG_VERSION := 9.0.2
+TARGET_KERNEL_CLANG_VERSION := 9.0.3
 
 # QCOM
 BOARD_USES_QCOM_HARDWARE := true
@@ -73,7 +73,7 @@ BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
 # Assert
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
-TARGET_OTA_ASSERT_DEVICE := whyred
+TARGET_OTA_ASSERT_DEVICE := tulip
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -114,7 +114,6 @@ AUDIO_FEATURE_ENABLED_SOURCE_TRACKING := true
 AUDIO_FEATURE_ENABLED_AUDIOSPHERE := true
 AUDIO_FEATURE_ENABLED_GEF_SUPPORT := true
 AUDIO_FEATURE_ENABLED_USB_TUNNEL_AUDIO := true
-AUDIO_FEATURE_ENABLED_SPLIT_A2DP := true
 AUDIO_FEATURE_ENABLED_RAS := true
 AUDIO_FEATURE_ENABLED_SND_MONITOR := true
 
@@ -211,11 +210,17 @@ TARGET_COPY_OUT_VENDOR := vendor
 TARGET_USES_INTERACTION_BOOST := true
 
 # Recovery
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
+TARGET_RECOVERY_UI_BLANK_UNBLANK_ON_INIT := true
 
 # Releasetools
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_whyred
+TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_tulip
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
+
+# Power
+TARGET_HAS_NO_WLAN_STATS := true
+TARGET_HAS_NO_POWER_STATS := true
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
@@ -223,26 +228,28 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 TARGET_RIL_VARIANT := caf
 
 # Security patch level
-VENDOR_SECURITY_PATCH := 2019-01-01
+VENDOR_SECURITY_PATCH := 2018-06-05
 
 # Seccomp
 BOARD_SECCOMP_POLICY := $(DEVICE_PATH)/seccomp
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
-BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
+BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy/vendor
+BOARD_PLAT_PUBLIC_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/public
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(DEVICE_PATH)/sepolicy/private
+
+# Telephony
+TARGET_USES_ALTERNATIVE_MANUAL_NETWORK_SELECT := true
 
 # Treble
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 PRODUCT_VENDOR_MOVE_ENABLED := true
 
-# Use mke2fs to create ext4 images
-TARGET_USES_MKE2FS := true
-
 # Vendor init
-TARGET_INIT_VENDOR_LIB := libinit_whyred
-TARGET_RECOVERY_DEVICE_MODULES := libinit_whyred
+TARGET_INIT_VENDOR_LIB := libinit_tulip
+TARGET_RECOVERY_DEVICE_MODULES := libinit_tulip
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
@@ -271,4 +278,4 @@ endif
 PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI
 
 # inherit from the proprietary version
--include vendor/xiaomi/whyred/BoardConfigVendor.mk
+-include vendor/xiaomi/tulip/BoardConfigVendor.mk
